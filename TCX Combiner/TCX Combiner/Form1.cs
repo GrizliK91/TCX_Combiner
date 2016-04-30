@@ -21,19 +21,19 @@ namespace TCX_Combiner
 
         TimeSpan time_endo;
         TimeSpan time_gar;
-        TimeSpan time_rez;
-        TimeSpan time_value = new TimeSpan(0, 0, 13);
 
         int count_time_gar_string = 0;
         int count_heart_string = 0;
 
-        bool find_time = false;
-        bool flag_timecount = false;
-        bool flag_heartcount = false;
+        bool flag_changeitem = false;
         bool flag_containsFlag = false;
+        bool flag_lap = false;
 
         List<string> list_heart_value = new List<string>();
         List<string> list_time_value = new List<string>();
+        List<string> list_creator = new List<string>();
+
+        bool flag_creator = false;
 
         private void load_garmin_file()
         {
@@ -43,9 +43,15 @@ namespace TCX_Combiner
             {
                 while ((line_garm = reader.ReadLine()) != null)
                 {
-                    listBox_garm.Items.Add(line_garm.Replace(" ", ""));
+                    if (line_garm.Contains("</Lap>") == true)
+                        flag_lap = true;
+                    if (flag_lap == true)
+                        listBox_garm.Items.Add(line_garm);
+                    else
+                        listBox_garm.Items.Add(line_garm.Replace(" ", ""));
                 }
             }
+            flag_lap = false;
             list_heart_value.Clear();
             list_time_value.Clear();
             foreach (var item in listBox_garm.Items)
@@ -62,6 +68,15 @@ namespace TCX_Combiner
                 }
                 if (str.Contains("<Time>") == true)
                     time_string = str;
+
+                if (str.Contains("<Creator xsi:type=\"Device_t\">") == true)
+                    flag_creator = true;
+                if (flag_creator == true)
+                {
+                    list_creator.Add(str);
+                    if (str.Contains("</Creator>") == true)
+                        flag_creator = false;
+                }
             }
 
             if (list_heart_value.Count > 0 && list_time_value.Count > 0)
@@ -167,37 +182,72 @@ namespace TCX_Combiner
             {
                 str = items.ToString();
 
-                if (str.Contains("<Time>") == true && flag_timecount == false)
+                if (str.Contains("<Time>") == true)
                 {
                     time_endo = TimeSpan.Parse(str.Substring(17, 8));
-                    time_rez = time_gar - time_endo;
-                    if (time_rez < time_value)
+                    //time_rez = time_gar - time_endo;
+                    if (time_gar < time_endo)
                     {
-                        find_time = true;
+                        flag_changeitem = true;
 
-                        if (list_time_value.Count > count_time_gar_string)
+                        if (count_time_gar_string < list_time_value.Count)
                         {
                             time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
                             count_time_gar_string++;
                         }
                         else
-                            flag_timecount = false;
+                        {
+                            count_time_gar_string--;
+                            time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+                            count_time_gar_string++;
+                        }
                     }
-                }
-                if (find_time == true && flag_heartcount == false && flag_timecount == false)
-                {
-                    find_time = false;
+                    else
+                        time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+
                     listBox_output.Items.Add(str);
-                    if (list_heart_value.Count > count_heart_string)
+
+                    if (count_heart_string < list_heart_value.Count)
                     {
+                        if (flag_changeitem == true)
+                        {
+                            flag_changeitem = false;
+                            listBox_output.Items.Add(list_heart_value[count_heart_string]);
+                            count_heart_string++;
+                        }
+                        else
+                            listBox_output.Items.Add(list_heart_value[count_heart_string]);
+                    }
+                    else
+                    {
+                        count_heart_string--;
                         listBox_output.Items.Add(list_heart_value[count_heart_string]);
                         count_heart_string++;
                     }
-                    else
-                        flag_heartcount = false;
                 }
                 else
+                {
                     listBox_output.Items.Add(str);
+                    if (str.Contains("</Lap>") == true)
+                    {
+                        foreach (var line in list_creator)
+                            listBox_output.Items.Add(line);
+                    }
+                    if (str.Contains("</Activities>") == true)
+                    {
+                        listBox_output.Items.Add("<Author xsi:type=\"Application_t\">");
+                        listBox_output.Items.Add("<Name>TCX_combiner</Name>");
+                        listBox_output.Items.Add("<Build>");
+                        listBox_output.Items.Add("<Version>");
+                        listBox_output.Items.Add("<VersionMajor>1</VersionMajor>");
+                        listBox_output.Items.Add("<VersionMinor>0</VersionMinor>");
+                        listBox_output.Items.Add("<BuildMajor>0</BuildMajor>");
+                        listBox_output.Items.Add("<BuildMinor>3</BuildMinor>");
+                        listBox_output.Items.Add("</Version>");
+                        listBox_output.Items.Add("</Build>");
+                        listBox_output.Items.Add("</Author>");
+                    }
+                }
             }
             button_clear_combine.Enabled = true;
             button_save.Enabled = true;
@@ -296,7 +346,7 @@ namespace TCX_Combiner
 
         private void label_about_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TCX_Combiner\nApplication combine TCX from Endomondo App and Garmin Vivofit2\nAlexander Ivanov 2016","About",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("TCX_Combiner 1.0.0.4\nApplication combine TCX from Endomondo App and Garmin Vivofit2\nAlexander Ivanov 2016","About",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
 }

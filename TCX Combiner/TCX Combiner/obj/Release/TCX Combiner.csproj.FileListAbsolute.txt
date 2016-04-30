@@ -6,3 +6,4 @@ C:\Users\Alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combin
 C:\Users\Alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Release\TCX Combiner.csproj.GenerateResource.Cache
 C:\Users\Alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Release\TCX Combiner.exe
 C:\Users\Alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Release\TCX Combiner.pdb
+C:\Users\Alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Release\TCX Combiner.csprojResolveAssemblyReference.cache
