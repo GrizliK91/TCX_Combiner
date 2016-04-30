@@ -1,0 +1,9 @@
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\bin\Debug\TCX Combiner.exe.config
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\bin\Debug\TCX Combiner.exe
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\bin\Debug\TCX Combiner.pdb
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Debug\TCX Combiner.csprojResolveAssemblyReference.cache
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Debug\TCX_Combiner.Form1.resources
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Debug\TCX_Combiner.Properties.Resources.resources
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Debug\TCX Combiner.csproj.GenerateResource.Cache
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Debug\TCX Combiner.exe
+c:\users\alexander\documents\visual studio 2015\Projects\TCX Combiner\TCX Combiner\obj\Debug\TCX Combiner.pdb
