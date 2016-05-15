@@ -43,9 +43,11 @@ namespace TCX_Combiner
             {
                 while ((line_garm = reader.ReadLine()) != null)
                 {
-                    if (line_garm.Contains("</Lap>") == true)
+                    if (line_garm.Contains("<Track>") == true)
                         flag_lap = true;
-                    if (flag_lap == true)
+                    if (line_garm.Contains("</Track>") == true)
+                        flag_lap = false;
+                    if (flag_lap == false)
                         listBox_garm.Items.Add(line_garm);
                     else
                         listBox_garm.Items.Add(line_garm.Replace(" ", ""));
@@ -88,6 +90,7 @@ namespace TCX_Combiner
                 button_clear_garm.Enabled = true;
                 listBox_garm.AllowDrop = false;
                 label_dragndrop2.Visible = false;
+                button_save_heart_rate_only.Enabled = true;
 
                 if (listBox_endo.Items.Count > 0)
                     button_combine.Enabled = true;
@@ -202,10 +205,10 @@ namespace TCX_Combiner
                             count_time_gar_string++;
                         }
                     }
-                    else
-                        time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+                 //   time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+                   
 
-                    listBox_output.Items.Add(str);
+                        listBox_output.Items.Add(str);
 
                     if (count_heart_string < list_heart_value.Count)
                     {
@@ -325,6 +328,7 @@ namespace TCX_Combiner
             label_count_heart.Text = "Count Heart: ";
             label_count_time.Text = "Count Time: ";
             label_dragndrop2.Visible = true;
+            button_save_heart_rate_only.Enabled = false;
         }
 
         private void button_clear_endo_Click(object sender, EventArgs e)
@@ -347,6 +351,44 @@ namespace TCX_Combiner
         private void label_about_Click(object sender, EventArgs e)
         {
             MessageBox.Show("TCX_Combiner 1.0.0.4\nApplication combine TCX from Endomondo App and Garmin Vivofit2\nAlexander Ivanov 2016","About",MessageBoxButtons.OK,MessageBoxIcon.Information);
+        }
+
+        bool flag_info = true;
+
+        private void button_save_heart_rate_only_Click(object sender, EventArgs e)
+        {
+            listBox_output.Items.Clear();
+            time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+            foreach (var items in listBox_garm.Items)
+            {
+                str = items.ToString();
+
+                if (str.Contains("<DistanceMeters>") == true)
+                    flag_info = true;
+                if (str.Contains("<MaximumSpeed>") == true)
+                    flag_info = true;
+                if (str.Contains("<DistanceMeters>") == true)
+                    flag_info = true;
+
+                if (flag_info == false)
+                    listBox_output.Items.Add(str);
+
+                flag_info = false;
+            }
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = "TCX File (*.tcx)|*.tcx";
+            saveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            saveFile.FileName = "TCX_Combiner_heartrate_output";
+            if (saveFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                using (var sw = new StreamWriter(saveFile.FileName, false))
+                    foreach (var item in listBox_output.Items)
+                        sw.Write(item.ToString() + Environment.NewLine);
+                MessageBox.Show("Success");
+            }
+            listBox_output.Items.Clear();
+            button_clear_combine.Enabled = false;
+            button_save.Enabled = false;
         }
     }
 }

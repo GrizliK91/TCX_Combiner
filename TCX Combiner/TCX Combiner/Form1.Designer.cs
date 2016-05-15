@@ -44,6 +44,7 @@
             this.label_dragndrop1 = new System.Windows.Forms.Label();
             this.label_dragndrop2 = new System.Windows.Forms.Label();
             this.label_about = new System.Windows.Forms.Label();
+            this.button_save_heart_rate_only = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_load_endo
@@ -130,7 +131,7 @@
             // label_count_time
             // 
             this.label_count_time.AutoSize = true;
-            this.label_count_time.Location = new System.Drawing.Point(509, 493);
+            this.label_count_time.Location = new System.Drawing.Point(347, 510);
             this.label_count_time.Name = "label_count_time";
             this.label_count_time.Size = new System.Drawing.Size(64, 13);
             this.label_count_time.TabIndex = 19;
@@ -203,11 +204,23 @@
             this.label_about.Text = "About";
             this.label_about.Click += new System.EventHandler(this.label_about_Click);
             // 
+            // button_save_heart_rate_only
+            // 
+            this.button_save_heart_rate_only.Enabled = false;
+            this.button_save_heart_rate_only.Location = new System.Drawing.Point(525, 493);
+            this.button_save_heart_rate_only.Name = "button_save_heart_rate_only";
+            this.button_save_heart_rate_only.Size = new System.Drawing.Size(140, 27);
+            this.button_save_heart_rate_only.TabIndex = 26;
+            this.button_save_heart_rate_only.Text = "Save heart rate file";
+            this.button_save_heart_rate_only.UseVisualStyleBackColor = true;
+            this.button_save_heart_rate_only.Click += new System.EventHandler(this.button_save_heart_rate_only_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1021, 532);
+            this.Controls.Add(this.button_save_heart_rate_only);
             this.Controls.Add(this.label_about);
             this.Controls.Add(this.label_dragndrop2);
             this.Controls.Add(this.label_dragndrop1);
@@ -251,6 +264,7 @@
         private System.Windows.Forms.Label label_dragndrop1;
         private System.Windows.Forms.Label label_dragndrop2;
         private System.Windows.Forms.Label label_about;
+        private System.Windows.Forms.Button button_save_heart_rate_only;
     }
 }
 
