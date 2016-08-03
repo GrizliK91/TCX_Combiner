@@ -176,7 +176,7 @@ namespace TCX_Combiner
                 }
             }
         }
-
+        bool skip = false;
         private void button_combine_Click(object sender, EventArgs e)
         {
             listBox_output.Items.Clear();
@@ -184,31 +184,39 @@ namespace TCX_Combiner
             foreach (var items in listBox_endo.Items)
             {
                 str = items.ToString();
+                if (str.Contains("<Extensions>") == true)
+                    skip = true;
 
-                if (str.Contains("<Time>") == true)
+                if (skip == false)
                 {
-                    time_endo = TimeSpan.Parse(str.Substring(17, 8));
-                    //time_rez = time_gar - time_endo;
-                    if (time_gar < time_endo)
+                    if (str.Contains("<Time>") == true)
                     {
-                        flag_changeitem = true;
-
-                        if (count_time_gar_string < list_time_value.Count)
+                        time_endo = TimeSpan.Parse(str.Substring(17, 8));
+                        //time_rez = time_gar - time_endo;
+                        if (time_gar < time_endo)
                         {
-                            time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
-                            count_time_gar_string++;
-                        }
-                        else
-                        {
-                            count_time_gar_string--;
-                            time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
-                            count_time_gar_string++;
-                        }
-                    }
-                 //   time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
-                   
+                            flag_changeitem = true;
 
-                        listBox_output.Items.Add(str);
+                            if (count_time_gar_string < list_time_value.Count)
+                            {
+                                time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+                                count_time_gar_string++;
+                            }
+                            else
+                            {
+                                count_time_gar_string--;
+                                time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+                                count_time_gar_string++;
+                            }
+                        }
+                    
+                    //   time_gar = TimeSpan.Parse(list_time_value[count_time_gar_string].ToString());
+
+
+                    listBox_output.Items.Add(str);
+                }
+                    if (str.Contains("</Extensions>") == true)
+                        skip = false;
 
                     if (count_heart_string < list_heart_value.Count)
                     {
@@ -350,7 +358,7 @@ namespace TCX_Combiner
 
         private void label_about_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TCX_Combiner 1.0.0.4\nApplication combine TCX from Endomondo App and Garmin Vivofit2\nAlexander Ivanov 2016","About",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("TCX_Combiner 1.0.0.5\nApplication combine TCX from Endomondo App and Garmin Vivofit2\nAlexander Ivanov 2016","About",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
         bool flag_info = true;
@@ -363,15 +371,23 @@ namespace TCX_Combiner
             {
                 str = items.ToString();
 
-                if (str.Contains("<DistanceMeters>") == true)
-                    flag_info = true;
-                if (str.Contains("<MaximumSpeed>") == true)
-                    flag_info = true;
-                if (str.Contains("<DistanceMeters>") == true)
-                    flag_info = true;
+                if (str.Contains("<Extensions>") == true)
+                    skip = true;
+               
+                if (skip == false)
+                {
+                    if (str.Contains("<DistanceMeters>") == true)
+                        flag_info = true;
+                    if (str.Contains("<MaximumSpeed>") == true)
+                        flag_info = true;
+                    if (str.Contains("<DistanceMeters>") == true)
+                        flag_info = true;
 
-                if (flag_info == false)
-                    listBox_output.Items.Add(str);
+                    if (flag_info == false)
+                        listBox_output.Items.Add(str);
+                }
+                if (str.Contains("</Extensions>") == true)
+                    skip = false;
 
                 flag_info = false;
             }
